@@ -249,10 +249,14 @@ sfr_high=outfile[4]
 #To_arr = outfile[5]
 #Tf_arr = outfile[6]
 met_arr = np.array(outfile[6])
+met_arr1 = np.append(met_arr, met_arr[-1])
+print met_arr[-1]
 for i,m in enumerate(met_arr):
     if m == 0:
-        met_arr[i] = np.nan   
-met_arr1 = np.append(met_arr, -1.9)  
+        met_arr[i] = np.nan
+for i,m in enumerate(met_arr1):
+    if m == 0:
+        met_arr1[i] = np.nan 
 met_up = outfile[7]
 met_up1 = np.append(met_up, 0)
 met_low = outfile[8]
