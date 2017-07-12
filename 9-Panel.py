@@ -133,7 +133,50 @@ def plot_Scatter(fig, x, y, subx1, suby2, subsize, title, xlabel, ylabel,linesty
       #ax.set_xticklabels(ax.get_xticks(), size=8)
       #ax.set_yticklabels(ax.get_yticks(), size=8)
       return ax
- 
+
+def plot_Scatter2(fig, x, y, subx1, suby2, subsize, title, xlabel, ylabel,linestyle, errlow=[], errhigh=[], bound=False):    
+      x = np.array(x)
+      y = np.array(y)
+      
+      if errlow == []:
+          errlow = np.zeroes_like(x)
+      else:
+          errlow = np.array(errlow)
+      
+      if errhigh == []:
+          errhigh = np.zeroes_like(x)
+      else:
+          errhigh = np.array(errhigh)    
+          
+      nonnan = np.logical_not(np.isnan(x)) & np.logical_not(np.isnan(y))
+      x = x[nonnan]
+      y = y[nonnan]
+      errlow = errlow[nonnan]
+      errhigh = errhigh[nonnan]
+    
+      ax = fig.add_axes([subx1, suby2, subsize, subsize])
+      if len(errlow) == 0:
+		ax.scatter(x, y,'k', linestyle = 'None', linewidth = 0)
+      else:
+          
+		ax.errorbar(x, y, yerr=[errlow, errhigh], fmt='k', capsize=0, ecolor='k', elinewidth=0.7, linestyle='none', marker = '.', markersize = 3)
+      ax.set_title(title, fontsize=8)
+      ax.set_xlabel(xlabel, fontsize=8)
+      ax.set_ylabel(ylabel, fontsize=8)
+      if bound == True:
+		ax.set_xlim(14.0, min(x))
+		ax.set_xticks(np.array([14, 12, 10, 8, 6, 4, 2, 0]))
+		ax.set_xticklabels(ax.get_xticks(), size=8)
+		ax.set_yticklabels(ax.get_yticks(), size=8)
+      else:
+		ax.set_xlim(max(x),min(x))
+		ax.set_xticklabels(ax.get_xticks(), size=8)
+		ax.set_yticklabels(ax.get_yticks(), size=8)
+		#ax.set_ylim(min(y)*0.8, max(y)*1.2)
+      #ax.set_xticklabels(ax.get_xticks(), size=8)
+      #ax.set_yticklabels(ax.get_yticks(), size=8)
+      return ax
+
 def plot_Hist(fig, x, y, subx1, suby2, subsize, title, xlabel, ylabel, linestyle, errlow=[], errhigh=[], bound = False):
    
     ax = fig.add_axes([subx1, suby2, subsize, subsize]) 
@@ -322,7 +365,7 @@ ax_4 = plot_Scatter(fig, age_arr1, csf_arr1, subx3, suby3, subsize, '(c) Cumulat
 
 ax_3 = plot_Scatter(fig, lage_arr1, met_arr1, subx2, suby1, subsize, '(h) Metallicity', 'log(age)','Z','solid', met_low1, met_up1, bound = False)
 
-ax_6 = plot_Scatter(fig, age_arr1, met_arr1, subx3, suby1, subsize, '(i) Metallicity', 'age (Gyr)', 'Z','solid', met_low1, met_up1, bound = True)
+ax_6 = plot_Scatter2(fig, age_arr1, met_arr1, subx3, suby1, subsize, '(i) Metallicity', 'age (Gyr)', 'Z','solid', met_low1, met_up1, bound = True)
 
 #plt.show()
 fig.savefig(plot_name, dpi=300, bbox_inches='tight')
